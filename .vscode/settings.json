@@ -1,0 +1,5 @@
+{
+    "cmake.sourceDirectory": "${workspaceFolder}/experiments",
+    "cmake.useCMakePresets": "always",
+    "cmake.parallelJobs": 0,
+}
