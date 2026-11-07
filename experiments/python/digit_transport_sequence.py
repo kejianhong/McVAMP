@@ -193,6 +193,12 @@ def main(
     seed_settings = vamp.ConstraintSettings()
     seed_settings.max_iterations = 100
     seed_settings.descend_rate = 0.75
+    # Snapping a seed onto the manifold needs every row free to move. With the default
+    # hold_satisfied_rows the feet rows are already satisfied and the LM solve holds them as
+    # pose equalities, which freezes the leg joints that the closed-loop rows have to move:
+    # the 'standing' seed (loops violated by ~1.5e-6) then never converges, at any iteration
+    # cap. Planning itself keeps the default.
+    seed_settings.hold_satisfied_rows = False
 
     sampler = module.halton()
     legs = []

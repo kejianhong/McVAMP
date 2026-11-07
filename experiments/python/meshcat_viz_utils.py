@@ -28,16 +28,15 @@ def replace_package_path(urdf_path):
     import re
     
     # Get all parents in the path
-    parents = os.path.dirname(urdf_path).split(os.sep)
-    replace_with = os.path.join(os.getcwd(), *parents) + '/meshes/'
-        
+    parents = os.path.dirname(urdf_path)
+    replace_with = os.path.join(parents, "meshes")
+
     # Read the URDF file
     with open(urdf_path, 'r') as f:
         urdf_content = f.read()
     
     # Replace package://franka_description with the current working directory
-    modified_content = re.sub(r'package://franka_description/meshes/', replace_with, urdf_content)
-    # modified_content = re.sub(r'package://meshes/', replace_with, urdf_content)
+    modified_content = re.sub(r'meshes', replace_with, urdf_content)
 
     # some urdfs have "package://franka_description/meshes/..." and some have meshes/ without the package prefix.
     # Uncomment the following if your case is the latter, and comment out the above replacement.
@@ -81,7 +80,7 @@ class MeshcatViz:
 
         # Set up visualizer
         self.viz = MeshcatVisualizer(self.model, coll_model, vis_model)
-        self.viz.initViewer(zmq_url="tcp://127.0.0.1:6000")
+        self.viz.initViewer(open=True, loadModel=True)
         self.viz.loadViewerModel()
         
         fig, self.axs = plt.subplots(2, 3, sharex=True, sharey='row', figsize=(12, 8))
@@ -117,8 +116,7 @@ class MeshcatViz:
                 mg.MeshLambertMaterial(color=color_to_hex([255, 140, 0]))
             )
             eepose[2, 3] -= 0.16
-            visualizer.viewer[f"waypoints_{self.waypoints_set}/waypoint_{i}"].set_transform(eepose)
-        
+            visualizer.viewer[f"waypoints_{self.waypoints_set}/waypoint_{i}"].set_transform(np.asarray(eepose, dtype=np.float64))
         # Toggle the other set of waypoints and delete it
         # (We do this so there isn't a flash when updating)
         self.waypoints_set = 'b' if self.waypoints_set == 'a' else 'a'
