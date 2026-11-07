@@ -1,6 +1,6 @@
 [submodule "vamp"]
 	path = vamp
-	url = git@github.com:CoMMALab/vamp.git
+	url = git@github.com:kejianhong/vamp.git
 	branch = stack-4-mcvamp
 [submodule "cricket"]
 	path = cricket
