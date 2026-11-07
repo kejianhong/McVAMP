@@ -15,7 +15,7 @@
 // with OuterLM it converged in some builds of this example and not in others (the Python
 // API shows the same). The example reports this instead of hiding it.
 //
-//     ./task_space_projection [--method=InnerLM|OuterLM|GradDesc] [--iterations=N] [--output=FILE]
+//     ./task_space_projection [--method=InnerLM|OuterLM|GradDesc|BoundedLS] [--iterations=N] [--output=FILE]
 
 #include "common.hh"
 #include "json_environment.hh"
@@ -62,7 +62,8 @@ auto main(int argc, char **argv) -> int
     const auto method = args.get("method", "InnerLM");
     settings.method = (method == "OuterLM") ? vc::ProjMethod::OuterLM :
                       (method == "GradDesc") ? vc::ProjMethod::GradDesc :
-                                               vc::ProjMethod::InnerLM;
+                      (method == "BoundedLS") ? vc::ProjMethod::BoundedLS :
+                      vc::ProjMethod::InnerLM;
     settings.max_iterations = args.get_size("iterations", 100);
 
     const auto tsr = std::make_shared<TSR>(

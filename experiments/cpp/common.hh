@@ -286,6 +286,8 @@ namespace experiments
                 return "OuterLM";
             case vc::ProjMethod::GradDesc:
                 return "GradDesc";
+            case vc::ProjMethod::BoundedLS:
+                return "BoundedLS";
         }
 
         return "?";

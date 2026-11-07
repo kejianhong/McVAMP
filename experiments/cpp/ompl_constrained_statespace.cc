@@ -10,7 +10,7 @@
 //
 // Needs OMPL (see README).
 //
-//     ./ompl_constrained_statespace [--scene=maze|cage] [--method=InnerLM|OuterLM|GradDesc]
+//     ./ompl_constrained_statespace [--scene=maze|cage] [--method=InnerLM|OuterLM|GradDesc|BoundedLS]
 //                                   [--time=SECONDS] [--range=R] [--output=FILE]
 
 #include "json_environment.hh"
@@ -79,7 +79,8 @@ auto main(int argc, char **argv) -> int
     const auto method = args.get("method", (maze) ? "OuterLM" : "InnerLM");
     settings.method = (method == "OuterLM") ? vc::ProjMethod::OuterLM :
                       (method == "GradDesc") ? vc::ProjMethod::GradDesc :
-                                               vc::ProjMethod::InnerLM;
+                      (method == "BoundedLS") ? vc::ProjMethod::BoundedLS :
+                      vc::ProjMethod::InnerLM;
     settings.max_iterations = 25;
     settings.emit_all_waypoints = false;
 
